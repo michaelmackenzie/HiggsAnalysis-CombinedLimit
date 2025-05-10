@@ -19,11 +19,18 @@
 
 # Hardcoded paths for standalone version identical to CMSSW 14_1_X
 # These are ignored if either CONDA=1 or LCG=1 is set
-BOOST = /cvmfs/cms.cern.ch/el9_amd64_gcc12/external/boost/1.80.0-87b5de10acd2f2c8a325345ad058b814
-VDT   = /cvmfs/cms.cern.ch/el9_amd64_gcc12/cms/vdt/0.4.3-793cee1e1edef0e54b2bd5cb1f69aec9
-GSL = /cvmfs/cms.cern.ch/el9_amd64_gcc12/external/gsl/2.6-5e2ce72ea2977ff21a2344bbb52daf5c
-EIGEN = /cvmfs/cms.cern.ch/el9_amd64_gcc12/external/eigen/3bb6a48d8c171cf20b5f8e48bfb4e424fbd4f79e-3ca740c03e68b1a067f3ed0679234a78
+BOOST = /cvmfs/mu2e.opensciencegrid.org/artexternals/boost/v1_82_0/Linux64bit+3.10-2.17-e28-prof
+# BOOST = /cvmfs/mu2e.opensciencegrid.org/artexternals/boost/v1_70_0/Linux64bit+3.10-2.17-e19-prof
+VDT   = /exp/mu2e/app/users/mmackenz/Yale/conv/combine_rooana/vdt/build
+GSL = /cvmfs/mu2e.opensciencegrid.org/artexternals/gsl/v2_7/Linux64bit+3.10-2.17
+# GSL = /cvmfs/mu2e.opensciencegrid.org/artexternals/gsl/v2_5/Linux64bit+3.10-2.17-prof
+EIGEN = /nashome/m/mmackenz/local/eigen-3.4.0
+# BOOST = /cvmfs/cms.cern.ch/el9_amd64_gcc12/external/boost/1.80.0-87b5de10acd2f2c8a325345ad058b814
+# VDT   = /cvmfs/cms.cern.ch/el9_amd64_gcc12/cms/vdt/0.4.3-793cee1e1edef0e54b2bd5cb1f69aec9
+# GSL = /cvmfs/cms.cern.ch/el9_amd64_gcc12/external/gsl/2.6-5e2ce72ea2977ff21a2344bbb52daf5c
+# EIGEN = /cvmfs/cms.cern.ch/el9_amd64_gcc12/external/eigen/3bb6a48d8c171cf20b5f8e48bfb4e424fbd4f79e-3ca740c03e68b1a067f3ed0679234a78
 # Compiler and flags -----------------------------------------------------------
+CC = c++
 CXX = $(shell root-config --cxx)
 ROOTCFLAGS = $(shell root-config --cflags)
 ROOTLIBS = $(shell root-config --libs --glibs)
@@ -31,19 +38,10 @@ ROOTINC = $(shell root-config --incdir)
 
 # CMSSW CXXFLAGS plus -Wno-unused-local-typedefs (otherwise we get a flood of messages from BOOST) plus -Wno-unused-function
 CCFLAGS = -D STANDALONE $(ROOTCFLAGS) -g -fPIC -O2 -pthread -pipe -Werror=main -Werror=pointer-arith -Werror=overlength-strings -Wno-vla -Werror=overflow -ftree-vectorize -Wstrict-overflow -Werror=array-bounds -Werror=format-contains-nul -Werror=type-limits -fvisibility-inlines-hidden -fno-math-errno --param vect-max-version-for-alias-checks=50 -Xassembler --compress-debug-sections -msse3 -felide-constructors -fmessage-length=0 -Wall -Wno-non-template-friend -Wno-long-long -Wreturn-type -Wunused -Wparentheses -Wno-deprecated -Werror=return-type -Werror=missing-braces -Werror=unused-value -Werror=address -Werror=format -Werror=sign-compare -Werror=write-strings -Werror=delete-non-virtual-dtor -Werror=strict-aliasing -Werror=narrowing -Werror=unused-but-set-variable -Werror=reorder -Werror=unused-variable -Werror=conversion-null -Werror=return-local-addr -Wnon-virtual-dtor -Werror=switch -fdiagnostics-show-option -Wno-unused-local-typedefs -Wno-attributes -Wno-psabi -Wno-error=unused-variable -DBOOST_DISABLE_ASSERTS -DGNU_GCC -D_GNU_SOURCE -DBOOST_SPIRIT_THREADSAFE -DPHOENIX_THREADSAFE
-LIBS = $(ROOTLIBS) -lgsl -lRooFit -lRooFitCore -lRooStats -lMinuit -lMathMore -lFoam -lHistFactory -lboost_filesystem -lboost_program_options -lboost_system -lvdt
+LIBS = $(ROOTLIBS) -L$(BOOST)/lib -L$(GSL)/lib -L$(VDT)/lib -lgsl -l RooFit -lRooFitCore -l RooStats -l Minuit -lMathMore -l Foam -lHistFactory -lboost_filesystem -lboost_program_options -lboost_system -lvdt
+# LIBS = $(ROOTLIBS) -lgsl -lRooFit -lRooFitCore -lRooStats -lMinuit -lMathMore -lFoam -lHistFactory -lboost_filesystem -lboost_program_options -lboost_system -lvdt
 
-ifeq ($(CONDA), 1)
-CCFLAGS += -I${CONDA_PREFIX}/include/boost -I ${CONDA_PREFIX}/include/vdt -I ${CONDA_PREFIX}/include/gsl -I ${CONDA_PREFIX}/include/eigen3 
-LIBS += -L${CONDA_PREFIX}/lib 
-else ifeq ($(LCG), 1)
-# for some reason, Eigen headers are nested in LCG
-CCFLAGS += -I ${CPLUS_INCLUDE_PATH}/eigen3
-LIBS += -L${CPLUS_INCLUDE_PATH}/../lib
-else
-CCFLAGS += -I$(BOOST)/include -I$(VDT)/include -I$(GSL)/include -I$(EIGEN)/include/eigen3
-LIBS += -L$(BOOST)/lib -L$(VDT)/lib -L$(GSL)/lib 
-endif 
+CCFLAGS += -I$(EIGEN) -I$(VDT)/include -I$(GSL)/include -I$(BOOST)/include
 
 # Library name -----------------------------------------------------------------
 LIBNAME=HiggsAnalysisCombinedLimit

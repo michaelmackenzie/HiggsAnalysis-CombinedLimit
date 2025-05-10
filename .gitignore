@@ -4,3 +4,8 @@
 build/
 install/
 site
+*.out
+*.log
+*.save
+*.tmp
+*~
