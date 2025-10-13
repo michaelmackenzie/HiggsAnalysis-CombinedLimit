@@ -48,6 +48,7 @@
 #include "HiggsAnalysis/CombinedLimit/interface/RooParametricShapeBinPdf.h"
 #include "HiggsAnalysis/CombinedLimit/interface/GaussExp.h"
 #include "HiggsAnalysis/CombinedLimit/interface/RooDoubleCBFast.h"
+#include "HiggsAnalysis/CombinedLimit/interface/RooLandauCB.h"
 #include "HiggsAnalysis/CombinedLimit/interface/CMSHistFunc.h"
 #include "HiggsAnalysis/CombinedLimit/interface/CMSHistErrorPropagator.h"
 #include "HiggsAnalysis/CombinedLimit/interface/CMSHistSum.h"

@@ -200,6 +200,7 @@
   <class name="SimpleTaylorExpansion1D" />
   <class name="RooTaylorExpansion" />
 	<class name="RooDoubleCBFast" />
+	<class name="RooLandauCB" />
 	<class name="CombDataSetFactory"  transient="true" />
 	<class name="DebugProposal"  transient="true" />
 	<class name="cmsmath::SequentialMinimizer"  transient="true" />
