@@ -13,5 +13,5 @@ export PATH=${PATH}:${PWD}/build/bin:${PWD}/scripts:${PWD}/../../vdt/:
 export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${PWD}/build/lib:${PWD}/../../vdt/build/lib/:${GSL}:${BOOST}:${TBB}:
 export LIBRARY_PATH=${LIBRARY_PATH}:${PWD}/build/lib:${PWD}/../../vdt/build/lib/:${GSL}:${BOOST}:${TBB}:
 # export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${PWD}/build/lib:${PWD}/../../vdt/build/lib/
-export PYTHONPATH=${PYTHONPATH}:${PWD}/build/lib/python/
-export CPLUS_INCLUDE_PATH=${CPLUS_INCLUDE_PATH}:../../vdt/:${HOME}/local/eigen-3.4.0/
+export PYTHONPATH=${PYTHONPATH}:${PWD}/build/lib/python/:${MUSE_WORK_DIR}
+export CPLUS_INCLUDE_PATH=${CPLUS_INCLUDE_PATH}:../../vdt/:${HOME}/local/eigen-3.4.0/:${MUSE_WORK_DIR}
