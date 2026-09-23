@@ -31,7 +31,8 @@ public:
                 RooAbsReal& x, const RooArgList& coefList) :
     RooAbsPdf(name, title),
     _x("x", "Dependent", this, x),
-    _coefList("coefList","List of coefficients",this)
+    _coefList("coefList","List of coefficients",this),
+    _protectSubRange(true)
     {
       _coefList.add(coefList);
       
@@ -71,7 +72,8 @@ public:
   
   Int_t getAnalyticalIntegral(RooArgSet& allVars, RooArgSet& analVars, const char* rangeName=0) const override
     {
-      
+      // Hack for fitting subranges - never calculate analytic integrals
+      if(_protectSubRange) return 0;
       // No analytical calculation available (yet) of integrals over subranges (as for standard RooBernstein)
       if (rangeName && strlen(rangeName)) {
         return 0 ;
@@ -98,6 +100,8 @@ public:
 
     }
 
+  void protectSubRange(bool protectSubRange) { _protectSubRange = protectSubRange; }
+
 protected:
 
   typedef ROOT::Math::SMatrix<double,N+1,N+1,ROOT::Math::MatRepStd<double,N+1,N+1> > MType;
@@ -111,6 +115,8 @@ protected:
   mutable VType _powvector;  //coefficients in power basis
   mutable VType _xvector;    //vector of powers of x variable
   
+  bool _protectSubRange;     //hack to force subrange and full range fits to be consistent, always use numerical integration
+
   Double_t evaluate() const override
     {
 
@@ -128,9 +134,10 @@ protected:
         _powvector = _cmatrix*_bernvector;   
       }
       
-      double xmin = _x.min();
-      double xmax = _x.max();
-      double x = (_x - xmin) / (xmax - xmin); // rescale to [0,1]
+      // Hack for fitting subranges - use full range
+      const double xmin = (_protectSubRange) ? _x.min("full") : _x.min();
+      const double xmax = (_protectSubRange) ? _x.max("full") : _x.max();
+      const double x = (_x - xmin) / (xmax - xmin); // rescale to [0,1]
       _xvector[0] = 1.;
       for (int ipow=1; ipow<=N; ++ipow) {
         _xvector[ipow] = x*_xvector[ipow-1];

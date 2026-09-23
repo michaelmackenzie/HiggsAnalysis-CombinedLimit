@@ -2,9 +2,6 @@
 #include <math.h>
 #include "TMath.h"
 
-//#include "../interface/RooLandauCB.h"
-//#include "../interface/RooFermi.h"
-//#include "../interface/RooRelBW.h"
 #include "../interface/RooLandauCB.h"
 #include "RooRealVar.h"
 #include "RooRealConstant.h"
